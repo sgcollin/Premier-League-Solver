@@ -20,7 +20,7 @@ public class LeagueTable {
 	private int[] points = new int[20];
 	
 	public void PrintRecord() throws IOException {
-		String file_name = "C:/Users/Stephen/workspace/PLPlayoffOdds/src/LeagueTable.txt";
+		String file_name = "C:/Users/Stephen/workspace/PLPlayoffOdds/src/LeagueTable_Mock.txt";
 		ReadFile file = new ReadFile(file_name);
 		aryClub = file.getClub();
 		aryRecord = file.getRecord();
