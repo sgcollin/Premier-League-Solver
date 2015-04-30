@@ -1,4 +1,6 @@
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,7 +22,8 @@ public class LeagueTable {
 	private int[] points = new int[20];
 	
 	public void PrintRecord() throws IOException {
-		String file_name = "C:/Users/Stephen/workspace/PLPlayoffOdds/src/LeagueTable_Mock.txt";
+		URL url = getClass().getResource("LeagueTable_Mock.txt");
+		String file_name = url.getPath();
 		ReadFile file = new ReadFile(file_name);
 		aryClub = file.getClub();
 		aryRecord = file.getRecord();
