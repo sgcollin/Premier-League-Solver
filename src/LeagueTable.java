@@ -1,7 +1,5 @@
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -20,7 +18,7 @@ public class LeagueTable {
 	private int[] pointsFor = new int[20];
 	private int[] pointsAgainst = new int[20];
 	private int[] points = new int[20];
-<<<<<<< HEAD
+	private int[] fifaValue = new int[20];
 	private ArrayList<String> club = new ArrayList<String>();
 	private ArrayList<Integer> clubFrequency = new ArrayList<Integer>();
 	private String path = "";
@@ -56,14 +54,8 @@ public class LeagueTable {
 	}
 	
 	public void PrintRecord() throws IOException {
-		URL url = getClass().getResource(path);
-=======
-	private int[] fifaValue = new int[20];
-	
-	public void PrintRecord() throws IOException {
 		URL url = getClass().getResource("LeagueTable_Mock.txt");
 		URL fifaUrl = getClass().getResource("fifa14.txt");
->>>>>>> origin/master
 		String file_name = url.getPath();
 		String fifa_name = fifaUrl.getPath();
 		ReadFile file = new ReadFile(file_name);
