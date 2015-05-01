@@ -20,15 +20,20 @@ public class LeagueTable {
 	private int[] pointsFor = new int[20];
 	private int[] pointsAgainst = new int[20];
 	private int[] points = new int[20];
+	private int[] fifaValue = new int[20];
 	
 	public void PrintRecord() throws IOException {
 		URL url = getClass().getResource("LeagueTable_Mock.txt");
+		URL fifaUrl = getClass().getResource("fifa14.txt");
 		String file_name = url.getPath();
+		String fifa_name = fifaUrl.getPath();
 		ReadFile file = new ReadFile(file_name);
+		ReadFIFAFile fifaFile = new ReadFIFAFile(fifa_name);
 		aryClub = file.getClub();
 		aryRecord = file.getRecord();
 		pointsFor = file.getPointsFor();
 		pointsAgainst = file.getPointsAgainst();
+		fifaValue = fifaFile.getScore();
 	}
 	
 	public void setTable() throws IOException {
