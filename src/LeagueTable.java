@@ -20,9 +20,42 @@ public class LeagueTable {
 	private int[] pointsFor = new int[20];
 	private int[] pointsAgainst = new int[20];
 	private int[] points = new int[20];
+	private ArrayList<String> club = new ArrayList<String>();
+	private ArrayList<Integer> clubFrequency = new ArrayList<Integer>();
+	private String path = "";
+	
+	public LeagueTable(String fileName) {
+		path = fileName;
+	}
+	
+	public void collectClubFrequency() throws IOException {
+		String[] seasonFiles = {"LeagueTable_Mock.txt",
+				"LeagueTable_2013-2014.txt",
+				"LeagueTable_2012-2013.txt",
+				"LeagueTable_2011-2012.txt",
+				"LeagueTable_2010-2011.txt"};
+		
+		for(int i = 0; i < seasonFiles.length; i++){ //loop through seasons
+			path = seasonFiles[i];
+			sortTable();
+			for(int j = 0; j < aryClub.length; j++){
+				if(!club.contains(aryClub[j])){ //Not already in list
+					club.add(aryClub[j]);
+					clubFrequency.add(j);
+				}else{
+					int index = club.indexOf(aryClub[j]); //increment freq by 1
+					int freq = clubFrequency.get(index);
+					clubFrequency.set(index, freq + j);
+				}
+			}
+		}
+		for(int k = 0; k < aryClub.length; k++){
+			System.out.println(club.get(k) + " " + clubFrequency.get(k));
+		}
+	}
 	
 	public void PrintRecord() throws IOException {
-		URL url = getClass().getResource("LeagueTable_Mock.txt");
+		URL url = getClass().getResource(path);
 		String file_name = url.getPath();
 		ReadFile file = new ReadFile(file_name);
 		aryClub = file.getClub();
@@ -287,12 +320,14 @@ public class LeagueTable {
 	}
 	
 	public static void main(String args[]) throws IOException {
-		LeagueTable l = new LeagueTable();
+		LeagueTable l = new LeagueTable("LeagueTable_Mock.txt");
+		
 		Scanner reader = new Scanner(System.in);
 		System.out.println("Welcome to the Premier League Playoff Solver.");
 		System.out.println("1 Show League Table");
-		System.out.println("2 Calculate scenerios: Champion");
-		System.out.println("3 Calculate scenerios: Champions League");
+		System.out.println("2 Show Projected League Table");
+		System.out.println("3 Calculate scenerios: Champion");
+		System.out.println("4 Calculate scenerios: Champions League");
 		
 		System.out.print  ("Enter Number: ");
 		int counter = reader.nextInt();
@@ -300,12 +335,16 @@ public class LeagueTable {
 			l.TableView();
 		}
 		else if(counter == 2){
+			LeagueTable ls = new LeagueTable("LeagueTable_2010-2011.txt");
+			ls.collectClubFrequency();
+		}
+		else if(counter == 3){
 			System.out.print("Which team? : ");
 			String club = reader.next();
 			l.totalPossibilitiesChampion(club);
 			//l.ChampionScenario();
 		}
-		else if(counter == 3){
+		else if(counter == 4){
 			//l.ChampionsLeagueScenario();
 		}
 		else{
