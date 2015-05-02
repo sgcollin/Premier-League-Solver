@@ -66,7 +66,7 @@ public class LeagueTable {
 		for(int k = 0; k < aryClub.length; k++){
 			PrintFIFAScore();
 			sortTable();
-			totalProjection.add((fifaValue[k]/fifaSum) / (((clubFrequency.get(k) + 5)/freqSum) * 10) * 100);
+			totalProjection.add((fifaValue[k]/fifaSum) / (((clubFrequency.get(k))/freqSum)));
 		}
 		
 		ArrayList<Double> fifa = new ArrayList<Double>();
