@@ -101,7 +101,7 @@ public class LeagueTable {
 	}
 	
 	public void PrintFIFAScore() throws IOException {
-		URL fifaUrl = getClass().getResource("fifa14.txt");
+		URL fifaUrl = getClass().getResource("fifa15.txt");
 		String fifa_name = fifaUrl.getPath();
 		ReadFIFAFile fifaFile = new ReadFIFAFile(fifa_name);
 		fifaValue = fifaFile.getScore();
@@ -381,7 +381,6 @@ public class LeagueTable {
 		System.out.println("1 Show League Table");
 		System.out.println("2 Show Projected League Table");
 		System.out.println("3 Calculate scenerios: Champion");
-		System.out.println("4 Calculate scenerios: Champions League");
 		
 		System.out.print  ("Enter Number: ");
 		int counter = reader.nextInt();
@@ -397,9 +396,6 @@ public class LeagueTable {
 			String club = reader.next();
 			l.totalPossibilitiesChampion(club);
 			//l.ChampionScenario();
-		}
-		else if(counter == 4){
-			//l.ChampionsLeagueScenario();
 		}
 		else{
 			System.out.println("You Entered an incorrect input!");
