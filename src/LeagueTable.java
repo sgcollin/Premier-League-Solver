@@ -18,9 +18,11 @@ public class LeagueTable {
 	private int[] pointsFor = new int[20];
 	private int[] pointsAgainst = new int[20];
 	private int[] points = new int[20];
-	private int[] fifaValue = new int[20];
+	private double[] fifaValue = new double[20];
 	private ArrayList<String> club = new ArrayList<String>();
-	private ArrayList<Integer> clubFrequency = new ArrayList<Integer>();
+	private ArrayList<Double> clubFrequency = new ArrayList<Double>();
+	private ArrayList<Double> totalProjection = new ArrayList<Double>();
+	private ArrayList<Integer> projectedTable = new ArrayList<Integer>();
 	private String path = "";
 	
 	public LeagueTable(String fileName) {
@@ -40,31 +42,79 @@ public class LeagueTable {
 			for(int j = 0; j < aryClub.length; j++){
 				if(!club.contains(aryClub[j])){ //Not already in list
 					club.add(aryClub[j]);
-					clubFrequency.add(j);
+					clubFrequency.add((double)j);
 				}else{
 					int index = club.indexOf(aryClub[j]); //increment freq by 1
-					int freq = clubFrequency.get(index);
+					double freq = clubFrequency.get(index);
 					clubFrequency.set(index, freq + j);
 				}
 			}
 		}
+	}
+	
+	public void projectedLeagueTable() throws IOException {
+		collectClubFrequency();
+		
+		//Sum
+		int freqSum = 0;
+		int fifaSum = 0;
+		for(int i = 0; i < aryClub.length; i++){
+			freqSum += clubFrequency.get(i);
+			fifaSum += clubFrequency.get(i);
+		}
+		
 		for(int k = 0; k < aryClub.length; k++){
-			System.out.println(club.get(k) + " " + clubFrequency.get(k));
+			PrintFIFAScore();
+			sortTable();
+			totalProjection.add((fifaValue[k]/fifaSum) / (((clubFrequency.get(k) + 5)/freqSum) * 10) * 100);
+		}
+		
+		ArrayList<Double> fifa = new ArrayList<Double>();
+		for(int y = 0; y < aryClub.length; y++){
+			fifa.add(y, fifaValue[y]);
+		}
+		
+		for(int j = 0; j < aryClub.length; j++){
+			double highestValue = Collections.max(totalProjection);
+			int index = totalProjection.indexOf(highestValue);
+			if(j == 0){
+				System.out.println("-- PROJECTED CHAMPIONS LEAGUE --");
+			}
+			if(j == 4){
+				System.out.println("-- PROJECTED REMAINING TABLE --");
+			}
+			if(j == 17){
+				System.out.println("-- PROJECTED RELEGATION --");
+			}
+			
+			System.out.println(padRight(Integer.toString(j+1), 2) + " " + 
+			padRight(club.get(index),20) + " " + 
+			padRight(String.format("%.5g", clubFrequency.get(index)/freqSum),5) + " " + 
+			padRight(String.format("%.5g", fifa.get(index)/fifaSum), 5) + " " + 
+			String.format("%.5g", totalProjection.get(index)));
+			
+			totalProjection.remove(index);
+			club.remove(index);
+			clubFrequency.remove(index);
+			fifa.remove(index);
 		}
 	}
 	
-	public void PrintRecord() throws IOException {
-		URL url = getClass().getResource("LeagueTable_Mock.txt");
+	public void PrintFIFAScore() throws IOException {
 		URL fifaUrl = getClass().getResource("fifa14.txt");
-		String file_name = url.getPath();
 		String fifa_name = fifaUrl.getPath();
-		ReadFile file = new ReadFile(file_name);
 		ReadFIFAFile fifaFile = new ReadFIFAFile(fifa_name);
+		fifaValue = fifaFile.getScore();
+	}
+	
+	public void PrintRecord() throws IOException {
+		URL url = getClass().getResource(path);
+		String file_name = url.getPath();
+		ReadFile file = new ReadFile(file_name);
 		aryClub = file.getClub();
 		aryRecord = file.getRecord();
 		pointsFor = file.getPointsFor();
 		pointsAgainst = file.getPointsAgainst();
-		fifaValue = fifaFile.getScore();
 	}
 	
 	public void setTable() throws IOException {
@@ -99,6 +149,7 @@ public class LeagueTable {
 				    iTemp = pointsFor[i];pointsFor[i] = pointsFor[i+1];pointsFor[i+1] = iTemp;
 				    iTemp = pointsAgainst[i];pointsAgainst[i] = pointsAgainst[i+1];pointsAgainst[i+1] = iTemp;
 				    iTemp = points[i];points[i] = points[i+1];points[i+1] = iTemp;
+				    double dTemp = fifaValue[i];fifaValue[i] = fifaValue[i+1];fifaValue[i+1] = dTemp;
 				    counter++;
 				}			
 			}
@@ -339,7 +390,7 @@ public class LeagueTable {
 		}
 		else if(counter == 2){
 			LeagueTable ls = new LeagueTable("LeagueTable_2010-2011.txt");
-			ls.collectClubFrequency();
+			ls.projectedLeagueTable();
 		}
 		else if(counter == 3){
 			System.out.print("Which team? : ");
